@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config()
 const port = process.env.PORT || 5000
 const app = express()
-const { MongoClient, ServerApiVersion} = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
 
 //middlewere
 app.use(cors())
@@ -26,6 +26,13 @@ const run = async () => {
             const filter = {email:email}
             const findData = await memoryCollection.find(filter).toArray()
             res.send(findData)
+        })
+
+        app.delete('/memory/:id', async(req,res) => {
+            const memoryId = req.params.id
+            const filter = {_id:ObjectId(memoryId)}
+            const deleteMemory = await memoryCollection.deleteOne(filter)
+            res.send(deleteMemory)
         })
     }
     finally{
