@@ -27,6 +27,12 @@ const run = async () => {
             const findData = await memoryCollection.find(filter).toArray()
             res.send(findData)
         })
+        app.get('/memory/:id',async (req,res) =>{
+            const id= req.params.id
+            const filter = {_id:ObjectId(id)}
+            const showData = await memoryCollection.findOne(filter)
+            res.send(showData)
+        })
 
         app.delete('/memory/:id', async(req,res) => {
             const memoryId = req.params.id
