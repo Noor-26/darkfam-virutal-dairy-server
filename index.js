@@ -21,7 +21,12 @@ const run = async () => {
             const addMemory = await memoryCollection.insertOne(memory)
             res.send(addMemory);
         })
-     
+        app.get('/memory', async (req,res) =>{
+            const email = req.query.email
+            const filter = {email:email}
+            const findData = await memoryCollection.find(filter).toArray()
+            res.send(findData)
+        })
     }
     finally{
 
