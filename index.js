@@ -15,7 +15,13 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const run = async () => { 
     try{
         await client.connect()
-        console.log('connection done')
+        const memoryCollection = client.db("virtual-dairy").collection("memorys");
+        app.post('/memory', async(req,res) => {
+            const memory = req.body;
+            const addMemory = await memoryCollection.insertOne(memory)
+            res.send(addMemory);
+        })
+     
     }
     finally{
 
