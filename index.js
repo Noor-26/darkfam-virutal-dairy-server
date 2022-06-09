@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config()
 const port = process.env.PORT || 5000
 const app = express()
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
 
 //middlewere
@@ -16,6 +17,8 @@ const run = async () => {
     try{
         await client.connect()
         const memoryCollection = client.db("virtual-dairy").collection("memorys");
+        const userCollection =  client.db("virtual-dairy").collection("users");
+
         app.post('/memory', async(req,res) => {
             const memory = req.body;
             const addMemory = await memoryCollection.insertOne(memory)
@@ -33,7 +36,18 @@ const run = async () => {
             const showData = await memoryCollection.findOne(filter)
             res.send(showData)
         })
-
+        app.put('/users/:email',async(req,res)=>{
+            const email = req.params.email
+            const user = req.body
+            const filter = {email:email}
+            const options = {upsert:true}
+            const updateDoc={
+                $set:user
+            }
+            const result = await userCollection.updateOne(filter,updateDoc,options)
+            const token = jwt.sign({email:email},process.env.ACCESS_TOKEN,{expiresIn:'10h'})
+            res.send({result,token});
+        })
         app.delete('/memory/:id', async(req,res) => {
             const memoryId = req.params.id
             const filter = {_id:ObjectId(memoryId)}
