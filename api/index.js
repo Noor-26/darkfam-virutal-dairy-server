@@ -80,5 +80,5 @@ app.get('/',(req,res) => {
 })
 
 app.listen(port,() => {
-    console.log('Connections to the port done'); 
+    console.log('Connections to the port done',port); 
 })
