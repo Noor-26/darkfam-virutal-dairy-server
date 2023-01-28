@@ -39,13 +39,13 @@ const run = async () => {
             const addMemory = await memoryCollection.insertOne(memory)
             res.send(addMemory);
         })
-        app.get('/memory', async (req,res) =>{
+        app.get('/memory',varifyToken, async (req,res) =>{
             const email = req.query.email
             const filter = {email:email}
             const findData = await memoryCollection.find(filter).toArray()
             res.send(findData)
         })
-        app.get('/memory/:id', async (req,res) =>{
+        app.get('/memory/:id',varifyToken, async (req,res) =>{
             const id= req.params.id
             const filter = {_id:ObjectId(id)}
             const showData = await memoryCollection.findOne(filter)
