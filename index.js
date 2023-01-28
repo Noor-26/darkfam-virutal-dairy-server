@@ -63,7 +63,7 @@ const run = async () => {
             const token = jwt.sign({email:email},process.env.ACCESS_TOKEN)
             res.send({result,token});
         })
-        app.delete('/memory/:id', async(req,res) => {
+        app.delete('/memory/:id',varifyToken, async(req,res) => {
             const memoryId = req.params.id
             const filter = {_id:ObjectId(memoryId)}
             const deleteMemory = await memoryCollection.deleteOne(filter)
